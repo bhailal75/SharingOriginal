@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "587063422618",
+    "firebase_url": "https://literaturesharingforvi-44036.firebaseio.com",
+    "project_id": "literaturesharingforvi-44036",
+    "storage_bucket": "literaturesharingforvi-44036.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587063422618:android:2a5df903191c155f",
+        "android_client_info": {
+          "package_name": "com.lsfv.literaturesharing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587063422618-36j11kk58smm67frs0438psc9ip4tjsv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lsfv.literaturesharing",
+            "certificate_hash": "185a7a76bcc66049d86f5fb7bfd9daf8995e981b"
+          }
+        },
+        {
+          "client_id": "587063422618-2hojd0epu8cv1ie2k9vt6qgssa5sn9ql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqqX5P_0NMK0uo9IpcYzk-havHi9QdsgY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587063422618-2hojd0epu8cv1ie2k9vt6qgssa5sn9ql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

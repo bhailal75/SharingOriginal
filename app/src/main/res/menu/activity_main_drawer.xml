@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_download"
+            android:icon="@drawable/ic_file_download"
+            android:title="Downloaded files" />
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_contact_phone"
+            android:title="Give your feedback" />
+
+        <item
+            android:id="@+id/nav_changepin"
+            android:icon="@drawable/ic_book"
+            android:title="Change pin" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_profile"
+            android:title="Sign out" />
+    </group>
+
+  <!--  <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>-->
+
+</menu>
