@@ -18,8 +18,8 @@ import com.lsfv.literaturesharing.AsyncTasks.AsyncResponse;
 import com.lsfv.literaturesharing.AsyncTasks.WebserviceCall;
 import com.lsfv.literaturesharing.Helper.Config;
 import com.lsfv.literaturesharing.Helper.Utils;
-import com.lsfv.literaturesharing.Model.ChapterListModel;
-import com.lsfv.literaturesharing.Model.OnlineSongModel;
+import com.lsfv.literaturesharing.model.ChapterListModel;
+import com.lsfv.literaturesharing.model.OnlineSongModel;
 import com.lsfv.literaturesharing.Services.MusicServiceOnline;
 
 import java.util.ArrayList;

@@ -49,7 +49,7 @@ public class DownloadFileActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this, "Downloaded file Not Found", Toast.LENGTH_SHORT).show();
         }
-        DownloadChepterList adpt=new DownloadChepterList(DownloadFileActivity.this,R.layout.custom_downloadlist_layout,myList);
+        DownloadChepterList adpt=new DownloadChepterList(DownloadFileActivity.this,R.layout.custom_downloadlist_layout,list);
         listView.setAdapter(adpt);
     }
 

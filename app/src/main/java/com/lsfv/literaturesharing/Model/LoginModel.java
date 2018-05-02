@@ -1,4 +1,4 @@
-package com.lsfv.literaturesharing.Model;
+package com.lsfv.literaturesharing.model;
 
 
 public class LoginModel {

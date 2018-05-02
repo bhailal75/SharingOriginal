@@ -17,34 +17,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.google.gson.Gson;
-import com.lsfv.literaturesharing.Adapter.ChapterListAdapter;
+import com.lsfv.literaturesharing.Adapter.AllChapterListAdapter;
+import com.lsfv.literaturesharing.Adapter.RecentChapterListAdapter;
 import com.lsfv.literaturesharing.Adapter.DownloadTask;
 import com.lsfv.literaturesharing.AsyncTasks.AsyncResponse;
 import com.lsfv.literaturesharing.AsyncTasks.WebserviceCall;
 import com.lsfv.literaturesharing.Helper.Config;
 import com.lsfv.literaturesharing.Helper.Utils;
-import com.lsfv.literaturesharing.Model.ChapterListBean;
-import com.lsfv.literaturesharing.Model.ChapterListModel;
+import com.lsfv.literaturesharing.model.ChapterListBean;
+import com.lsfv.literaturesharing.model.ChapterListModel;
 import com.lsfv.literaturesharing.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 @SuppressLint("ValidFragment")
-public class AllChapterFragment extends Fragment implements ChapterListAdapter.ChapterClickListner {
+public class AllChapterFragment extends Fragment implements AllChapterListAdapter.ChapterClickListner {
 //    ListView listView;
 
     ArrayList<ChapterListBean> chapterList;
     MediaPlayer player;
     String s,type="a";
-    ChapterListAdapter chapterListAdapter;
+    AllChapterListAdapter allChapterListAdapter;
     SwipeRefreshLayout refreshLayout;
     private RecyclerView listView;
     private LinearLayoutManager linearLayoutManager;
@@ -57,8 +56,8 @@ public class AllChapterFragment extends Fragment implements ChapterListAdapter.C
     }
 
     public AllChapterFragment(ArrayList<ChapterListBean> chapterList) {
+        Collections.reverse(chapterList);
         this.chapterList = chapterList;
-
     }
 
     @Override
@@ -68,11 +67,11 @@ public class AllChapterFragment extends Fragment implements ChapterListAdapter.C
         listView= (RecyclerView) view.findViewById(R.id.chapter_list);
         refreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh);
 
-        Swipe();
+//        Swipe();
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         listView.setLayoutManager(linearLayoutManager);
-        chapterListAdapter = new ChapterListAdapter(getActivity(), chapterList, this);
-        listView.setAdapter(chapterListAdapter);
+        allChapterListAdapter = new AllChapterListAdapter(getActivity(), chapterList, this);
+        listView.setAdapter(allChapterListAdapter);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -82,7 +81,7 @@ public class AllChapterFragment extends Fragment implements ChapterListAdapter.C
                     public void run() {
                         refreshLayout.setRefreshing(false);
                     }
-                }, 500);
+                }, 3000);
                 Swipe();
             }
         });
@@ -109,14 +108,15 @@ public class AllChapterFragment extends Fragment implements ChapterListAdapter.C
                 if (model.getStatus().equalsIgnoreCase("1"))
                 {
                     chapterList.clear();
+                    chapterList.addAll(model.getChapterList());
 //                    chapterList=new ArrayList<>();
-                    for (int i=0;i<model.getChapterList().size();i++)
-                    {
-                        chapterList.add(model.getChapterList().get(i));
-                    }
-                    chapterListAdapter.notifyDataSetChanged();
-//                    chapterListAdapter=new ChapterListAdapter(getContext(),R.layout.chapterlist_cus_layout,chapterList,type);
-//                    listView.setAdapter(chapterListAdapter);
+//                    for (int i=0;i<model.getChapterList().size();i++)
+//                    {
+//                        chapterList.add(model.getChapterList().get(i));
+//                    }
+                    allChapterListAdapter.notifyDataSetChanged();
+//                    recentChapterListAdapter=new RecentChapterListAdapter(getContext(),R.layout.chapterlist_cus_layout,chapterList,type);
+//                    listView.setAdapter(recentChapterListAdapter);
                 }
             }
 
@@ -129,11 +129,17 @@ public class AllChapterFragment extends Fragment implements ChapterListAdapter.C
 
     @Override
     public void onChapterClick(int pos) {
+
         Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        intent.setAction(android.content.Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(chapterList.get(pos).getChapter_file()), "audio/*");
-        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, chapterList);
         startActivity(intent);
+
+//        Intent intent = new Intent();
+//        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+//        intent.setDataAndType(Uri.parse(chapterList.get(pos).getChapter_file()), "audio/*");
+//        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, chapterList);
+//        startActivity(intent);
 
     }
 
@@ -143,7 +149,6 @@ public class AllChapterFragment extends Fragment implements ChapterListAdapter.C
         downloadMp3Url=chapterList.get(pos).getChapter_file();
         downloadMp3ChapterName=chapterList.get(pos).getChapter_desc();
 //                //Toast.makeText(context, ""+downloadMp3Url, Toast.LENGTH_SHORT).show();
-
         new DownloadTask(getActivity(),downloadMp3Url,downloadMp3ChapterName);
     }
 }

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 
 import com.lsfv.literaturesharing.Adapter.AdapterClass;
-import com.lsfv.literaturesharing.Model.SongObject;
+import com.lsfv.literaturesharing.model.SongObject;
 import com.lsfv.literaturesharing.Services.MusicService;
 
 import java.io.File;

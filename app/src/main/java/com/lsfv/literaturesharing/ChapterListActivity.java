@@ -15,26 +15,23 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 
 import com.google.gson.Gson;
-import com.lsfv.literaturesharing.Adapter.ChapterListAdapter;
 import com.lsfv.literaturesharing.AsyncTasks.AsyncResponse;
 import com.lsfv.literaturesharing.AsyncTasks.WebserviceCall;
 import com.lsfv.literaturesharing.Fragment.AllChapterFragment;
 import com.lsfv.literaturesharing.Fragment.RecentChepterFragment;
 import com.lsfv.literaturesharing.Helper.Config;
 import com.lsfv.literaturesharing.Helper.Utils;
-import com.lsfv.literaturesharing.Model.ChapterListBean;
-import com.lsfv.literaturesharing.Model.ChapterListModel;
+import com.lsfv.literaturesharing.model.ChapterListBean;
+import com.lsfv.literaturesharing.model.ChapterListModel;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
@@ -78,8 +75,8 @@ public class ChapterListActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new RecentChepterFragment(chapterList), "ASCENDING");
-        adapter.addFragment(new AllChapterFragment(chapterList), "DESCENDING");
+        adapter.addFragment(new RecentChepterFragment(chapterList), "DESCENDING");
+        adapter.addFragment(new AllChapterFragment(chapterList), "ASCENDING");
         viewPager.setAdapter(adapter);
     }
 
@@ -207,7 +204,7 @@ public class ChapterListActivity extends AppCompatActivity {
                         chapterList.add(model.getChapterList().get(i));
                     }
 
-//                    chapterListAdapter=new ChapterListAdapter(getContext(),R.layout.chapterlist_cus_layout,chapterList,type);
+//                    chapterListAdapter=new RecentChapterListAdapter(getContext(),R.layout.chapterlist_cus_layout,chapterList,type);
 //                    listView.setAdapter(chapterListAdapter);
                     if (chapterList != null)
                     {

@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 
-import com.lsfv.literaturesharing.Model.SongObject;
+import com.lsfv.literaturesharing.model.SongObject;
 import com.lsfv.literaturesharing.R;
 
 import java.util.ArrayList;

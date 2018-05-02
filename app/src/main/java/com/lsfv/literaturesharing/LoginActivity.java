@@ -1,9 +1,7 @@
 package com.lsfv.literaturesharing;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,8 +19,8 @@ import com.lsfv.literaturesharing.AsyncTasks.AsyncResponse;
 import com.lsfv.literaturesharing.AsyncTasks.WebserviceCall;
 import com.lsfv.literaturesharing.Helper.Config;
 import com.lsfv.literaturesharing.Helper.Utils;
-import com.lsfv.literaturesharing.Model.ForgotPassModel;
-import com.lsfv.literaturesharing.Model.LoginModel;
+import com.lsfv.literaturesharing.model.ForgotPassModel;
+import com.lsfv.literaturesharing.model.LoginModel;
 
 public class LoginActivity extends AppCompatActivity {
     EditText number,pass;

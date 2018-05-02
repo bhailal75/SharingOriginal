@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -42,7 +41,7 @@ import com.lsfv.literaturesharing.Helper.Compressor;
 import com.lsfv.literaturesharing.Helper.Config;
 import com.lsfv.literaturesharing.Helper.NotiUtil;
 import com.lsfv.literaturesharing.Helper.Utils;
-import com.lsfv.literaturesharing.Model.RegistationModel;
+import com.lsfv.literaturesharing.model.RegistationModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

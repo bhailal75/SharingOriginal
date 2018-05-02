@@ -1,37 +1,31 @@
 package com.lsfv.literaturesharing.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.lsfv.literaturesharing.Model.BookListModel;
-import com.lsfv.literaturesharing.Model.ChapterListBean;
-import com.lsfv.literaturesharing.Model.ChapterListModel;
-import com.lsfv.literaturesharing.PlayerScreenActivity;
+import com.lsfv.literaturesharing.model.ChapterListBean;
 import com.lsfv.literaturesharing.R;
+import com.lsfv.literaturesharing.model.ChapterListBeanEntityManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ViewHolder>{
+public class RecentChapterListAdapter extends RecyclerView.Adapter<RecentChapterListAdapter.ViewHolder>{
 
+    private ArrayList<ChapterListBean> downloadedSong;
     private Context context;
     private List<ChapterListBean> audioChapterList;
     private ChapterClickListner chapterClickListner;
 
 
-    public ChapterListAdapter(Context context, ArrayList<ChapterListBean> audioChapterList, ChapterClickListner chapterClickListner) {
+    public RecentChapterListAdapter(Context context, ArrayList<ChapterListBean> audioChapterList, ChapterClickListner chapterClickListner) {
         this.context = context;
         this.audioChapterList = audioChapterList;
         this.chapterClickListner = chapterClickListner;
@@ -40,16 +34,21 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chapterlist_cus_layout,parent,false);
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ChapterListBean chapterModel = audioChapterList.get(position);
+        for (int i = 0; i < downloadedSong.size(); i++) {
+            if (downloadedSong != null && downloadedSong.size() > 0 && downloadedSong.get(i).getChapter_id() == audioChapterList.get(position).getChapter_id()){
+                holder.download.setVisibility(View.GONE);
+            }
+        }
+
         holder.textView.setText(chapterModel.getChapter_desc().toString());
         holder.download.setTag(position);
-
-//        holder.textView.setText(bookModel.getAudio_book_description().toString());
         holder.rvBookRaw.setTag(position);
     }
 
@@ -78,8 +77,14 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 //            imageView=(ImageView)itemView.findViewById(R.id.right_arrow);
 //            textView=(TextView)itemView.findViewById(R.id.book_name);
 //            rvBookRaw = (RelativeLayout) itemView.findViewById(R.id.book_Raw);
+            downloadedSong = new ArrayList<>();
+            ChapterListBeanEntityManager chapterListBeanEntityManager = new ChapterListBeanEntityManager();
+            if (chapterListBeanEntityManager.count() > 0){
+                downloadedSong = (ArrayList<ChapterListBean>) chapterListBeanEntityManager.select().asList();
+            }
             rvBookRaw.setOnClickListener(this);
             download.setOnClickListener(this);
+
         }
 
         @Override
@@ -87,7 +92,16 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             if (view == download){
                 if (chapterClickListner != null) {
                     int pos = (int) view.getTag();
+                    ChapterListBeanEntityManager chapterListBeanEntityManager = new ChapterListBeanEntityManager();
+                    ChapterListBean chapterListBean = new ChapterListBean();
+                    chapterListBean.setChapter_id(audioChapterList.get(pos).getChapter_id());
+                    chapterListBean.setChapter_desc(audioChapterList.get(pos).getChapter_desc());
+                    chapterListBean.setChapter_file(audioChapterList.get(pos).getChapter_file());
+                    chapterListBean.setDuration(audioChapterList.get(pos).getDuration());
+                    chapterListBeanEntityManager.add(chapterListBean);
+                    download.setVisibility(View.GONE);
                     chapterClickListner.onDownloadClick(pos);
+
 
                 }
             }
@@ -107,7 +121,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
 
 
-//public class ChapterListAdapter extends BaseAdapter {
+//public class RecentChapterListAdapter extends BaseAdapter {
 //    public static String downloadMp3Url = null;
 //    public static String downloadMp3ChapterName = null;
 //    Context context;
@@ -116,7 +130,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 //    ArrayList<ChapterListBean> chapterList;
 //    LayoutInflater inflater;
 //    MediaPlayer player =new MediaPlayer();
-//    public ChapterListAdapter(Context context, int booklist_cus_layout, ArrayList<ChapterListBean> book, String type) {
+//    public RecentChapterListAdapter(Context context, int booklist_cus_layout, ArrayList<ChapterListBean> book, String type) {
 //        this.context=context;
 //        this.layout=booklist_cus_layout;
 //        this.chapterList=book;
