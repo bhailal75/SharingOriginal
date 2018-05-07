@@ -54,13 +54,14 @@ public class RecentChepterFragment extends Fragment implements RecentChapterList
     private LinearLayoutManager linearLayoutManager;
     private String downloadMp3Url;
     private String downloadMp3ChapterName;
-
+    private String bkname;
     public RecentChepterFragment() {
         // Required empty public constructor
     }
 
-    public RecentChepterFragment(ArrayList<ChapterListBean> chapterList) {
+    public RecentChepterFragment(ArrayList<ChapterListBean> chapterList, String bkname) {
         this.chapterList = chapterList;
+        this.bkname = bkname;
     }
 
     @Override
@@ -163,6 +164,6 @@ public class RecentChepterFragment extends Fragment implements RecentChapterList
             downloadMp3ChapterName=chapterList.get(pos).getChapter_desc();
 //                //Toast.makeText(context, ""+downloadMp3Url, Toast.LENGTH_SHORT).show();
 
-                new DownloadTask(getActivity(),downloadMp3Url,downloadMp3ChapterName);
+                new DownloadTask(getActivity(),downloadMp3Url,downloadMp3ChapterName,bkname);
     }
 }

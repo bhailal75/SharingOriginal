@@ -15,6 +15,14 @@
     <string name="enter_current_pin">Enter current PIN</string>
     <string name="enter_new_pin">Enter new PIN</string>
     <string name="loading">Loading...</string>
+    <string name="share_facebook">facebook</string>
+    <string name="share_sms">sms</string>
+    <string name="share_twitter">twitter</string>
+    <string name="share_email_gmail">email gmail</string>
+    <string name="share_email_subject">subject</string>
+    <string name="share_chooser_text">choose</string>
+    <string name="share_email_native">native emial</string>
+    <string name="share_mxplayer">mxplayer</string>
 
     <string-array name="dd">
         <item>DD</item>

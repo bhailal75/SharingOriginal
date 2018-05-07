@@ -58,16 +58,11 @@ public class ChapterListActivity extends AppCompatActivity {
         pvChapter = (AVLoadingIndicatorView) findViewById(R.id.pv_chapter);
         tvLoading = (TextView) findViewById(R.id.tv_loading);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-
         Swipe();
         tabLayout.setupWithViewPager(viewPager);
-
-
 //        setupViewPager(viewPager);
-
         if (!checkPermission()) {
             requestPermission();
-
         } else {
             //Toast.makeText(ChapterListActivity.this, "Permission already granted", Toast.LENGTH_SHORT).show();
         }
@@ -75,8 +70,8 @@ public class ChapterListActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new RecentChepterFragment(chapterList), "DESCENDING");
-        adapter.addFragment(new AllChapterFragment(chapterList), "ASCENDING");
+        adapter.addFragment(new RecentChepterFragment(chapterList,getSupportActionBar().getTitle().toString()), "DESCENDING");
+        adapter.addFragment(new AllChapterFragment(chapterList,getSupportActionBar().getTitle().toString()), "ASCENDING");
         viewPager.setAdapter(adapter);
     }
 

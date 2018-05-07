@@ -49,15 +49,17 @@ public class AllChapterFragment extends Fragment implements AllChapterListAdapte
     private LinearLayoutManager linearLayoutManager;
     private String downloadMp3Url;
     private String downloadMp3ChapterName;
+    String bkname;
 
 
     public AllChapterFragment() {
         // Required empty public constructor
     }
 
-    public AllChapterFragment(ArrayList<ChapterListBean> chapterList) {
+    public AllChapterFragment(ArrayList<ChapterListBean> chapterList, String bkname) {
         Collections.reverse(chapterList);
         this.chapterList = chapterList;
+        this.bkname = bkname;
     }
 
     @Override
@@ -149,6 +151,6 @@ public class AllChapterFragment extends Fragment implements AllChapterListAdapte
         downloadMp3Url=chapterList.get(pos).getChapter_file();
         downloadMp3ChapterName=chapterList.get(pos).getChapter_desc();
 //                //Toast.makeText(context, ""+downloadMp3Url, Toast.LENGTH_SHORT).show();
-        new DownloadTask(getActivity(),downloadMp3Url,downloadMp3ChapterName);
+        new DownloadTask(getActivity(),downloadMp3Url,downloadMp3ChapterName,bkname);
     }
 }

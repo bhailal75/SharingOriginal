@@ -20,16 +20,18 @@ import java.net.URL;
 
 public class DownloadTask {
     public static final String mainUrl = "http://www.lsfv.in/admin/chapters/";
-    public static final String downloadDirectory = ".Audio Book";
+    public static final String downloadDirectory = "Literature sharing for VI";
     private String downloadUrl = "", downloadFileName = "",downloadchaptername="";
     Context context;
-    public DownloadTask(Context context, String downloadMp3Url, String downloadchaptername) {
+    String bkname;
+    public DownloadTask(Context context, String downloadMp3Url, String downloadchaptername, String bkname) {
         this.context=context;
         this.downloadUrl=downloadMp3Url;
         this.downloadchaptername=downloadchaptername;
         downloadFileName = downloadchaptername+""+downloadUrl.replace(mainUrl,"");
         downloadFileName = downloadchaptername;//Create file name by picking download file name from URL
         Log.e("file name", downloadFileName);
+        this.bkname = bkname;
 
         //Start Downloading Task
         new DownloadingTask().execute();
@@ -74,13 +76,14 @@ public class DownloadTask {
 
                     apkStorage = new File(
                             Environment.getExternalStorageDirectory() + "/"
-                                    + downloadDirectory);
+                                    + downloadDirectory + "/"
+                                    + bkname);
                 } else
                     Toast.makeText(context, "Oops!! There is no SD Card.", Toast.LENGTH_SHORT).show();
 
                 //If File is not present create directory
                 if (!apkStorage.exists()) {
-                    apkStorage.mkdir();
+                    apkStorage.mkdirs();
                     Log.e("g", "Directory Created.");
                 }
 

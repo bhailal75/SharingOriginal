@@ -30,13 +30,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.lsfv.literaturesharing.Adapter.BookListAdapter;
+import com.lsfv.literaturesharing.Adapter.DownloadBookTask;
+import com.lsfv.literaturesharing.Adapter.DownloadTask;
 import com.lsfv.literaturesharing.AsyncTasks.AsyncResponse;
 import com.lsfv.literaturesharing.AsyncTasks.WebserviceCall;
 import com.lsfv.literaturesharing.Helper.Config;
 import com.lsfv.literaturesharing.Helper.Utils;
+import com.lsfv.literaturesharing.model.AudiobookBean;
 import com.lsfv.literaturesharing.model.BookListModel;
+import com.lsfv.literaturesharing.model.ChapterListBean;
+import com.lsfv.literaturesharing.model.ChapterListBeanEntityManager;
+import com.lsfv.literaturesharing.model.ChapterListModel;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -53,14 +60,19 @@ public class MainActivity extends AppCompatActivity
     TextView tvLoading;
     SwipeRefreshLayout refreshLayout;
     BookListModel model;
-//    ListView listView;
-    int[] img={R.drawable.ic_right_arrow};
-    ArrayList<BookListModel.AudiobookBean> audiobookList;
+    String s, type = "r";
+    private String downloadMp3Url;
+    private String downloadMp3ChapterName;
+    //    ListView listView;
+    int[] img = {R.drawable.ic_right_arrow};
+    ArrayList<AudiobookBean> audiobookList;
     private static final int PERMISSION_REQUEST_CODE = 200;
     private SearchView search;
     private RecyclerView listView;
     private LinearLayoutManager linearLayoutManager;
     private BookListAdapter booklistAdapter;
+    private ArrayList<ChapterListBean> chapterList;
+    private String bkname;
 
 
     @Override
@@ -91,11 +103,11 @@ public class MainActivity extends AppCompatActivity
 
 //        listView=(ListView)findViewById(R.id.Book_list);
         listView = (RecyclerView) findViewById(R.id.Book_list);
-        refreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipe_refresh);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         pvHome = (AVLoadingIndicatorView) findViewById(R.id.pv_home);
         tvLoading = (TextView) findViewById(R.id.tv_loading);
 
-        audiobookList=new ArrayList<>();
+        audiobookList = new ArrayList<>();
         Swipe();
 
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -107,7 +119,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onRefresh() {
                 refreshLayout.setRefreshing(true);
-                ( new Handler()).postDelayed(new Runnable() {
+                (new Handler()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         refreshLayout.setRefreshing(false);
@@ -126,7 +138,7 @@ public class MainActivity extends AppCompatActivity
         } else {
 
             finish();
-             // Create custom dialog object
+            // Create custom dialog object
 //            final Dialog dialog = new Dialog(MainActivity.this);
 //            // Include dialog.xml file
 //            dialog.setContentView(R.layout.custom_alert_dialog);
@@ -172,24 +184,24 @@ public class MainActivity extends AppCompatActivity
 
 
         MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
-                    @Override
-                    public boolean onMenuItemActionExpand(MenuItem item) {
-                        ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
-                                toggleSoftInput(InputMethodManager.SHOW_FORCED,
-                                        InputMethodManager.HIDE_IMPLICIT_ONLY);
-                        return true;
-                    }
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                        toggleSoftInput(InputMethodManager.SHOW_FORCED,
+                                InputMethodManager.HIDE_IMPLICIT_ONLY);
+                return true;
+            }
 
-                    @Override
-                    public boolean onMenuItemActionCollapse(MenuItem item) {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
 //                        search.setImeOptions(6);
 //                        search.setFocusable(false);
-                        search.clearFocus();
-                        Swipe();
+                search.clearFocus();
+                Swipe();
 
-                        return true;
-                    }
-                });
+                return true;
+            }
+        });
 //        search.setQueryHint("Search Here");
 
 //        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -216,25 +228,23 @@ public class MainActivity extends AppCompatActivity
 
     private void Search(String s) {
 
-        String[]keys=new String[]{"mode","audio_search"};
-        String[]values=new String[]{"audioSearch", s};
-        String jsonRequest= Utils.createJsonRequest(keys,values);
+        String[] keys = new String[]{"mode", "audio_search"};
+        String[] values = new String[]{"audioSearch", s};
+        String jsonRequest = Utils.createJsonRequest(keys, values);
 
         String URL = Config.MAIN_URL;
         new WebserviceCall(MainActivity.this, URL, jsonRequest, "Getting BookList...!!", false, new AsyncResponse() {
             @Override
             public void onCallback(String response) {
-                Log.d("jjj",response);
+                Log.d("jjj", response);
                 audiobookList.clear();
-                model = new Gson().fromJson(response,BookListModel.class);
-                if (model.getStatus().equalsIgnoreCase("1"))
-                {
+                model = new Gson().fromJson(response, BookListModel.class);
+                if (model.getStatus().equalsIgnoreCase("1")) {
 
-                    for (int i=0;i<model.getAudiobook().size();i++)
-                    {
+                    for (int i = 0; i < model.getAudiobook().size(); i++) {
                         audiobookList.add(model.getAudiobook().get(i));
                     }
-                    Log.i("TAG", "search record: "+ audiobookList.size());
+                    Log.i("TAG", "search record: " + audiobookList.size());
                     booklistAdapter.notifyDataSetChanged();
 
                                /* SearchBookListAdapter adapter=new SearchBookListAdapter(getContext(),R.layout.booklist_cus_layout,audiobookList,img);
@@ -246,7 +256,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(MainActivity.this, ""+message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "" + message, Toast.LENGTH_SHORT).show();
             }
         }).execute();
     }
@@ -256,7 +266,7 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.refres:
                 refreshLayout.setRefreshing(true);
                 (new Handler()).postDelayed(new Runnable() {
@@ -283,10 +293,10 @@ public class MainActivity extends AppCompatActivity
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                          Toast.makeText(MainActivity.this, "!!"+s, Toast.LENGTH_SHORT).show();
-                        if (s.length()>0){
+                        Toast.makeText(MainActivity.this, "!!" + s, Toast.LENGTH_SHORT).show();
+                        if (s.length() > 0) {
                             Search(s);
-                        }else {
+                        } else {
                             Swipe();
                         }
                         return false;
@@ -294,12 +304,6 @@ public class MainActivity extends AppCompatActivity
                 });
                 break;
         }
-
-        //noinspection SimplifiableIfStatement
-       /* if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -310,20 +314,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_changepin) {
-            Intent intent=new Intent(getApplicationContext(),ProfileActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_download) {
-            Intent intent=new Intent(getApplicationContext(),DownloadFileActivity.class);
+            Intent intent = new Intent(getApplicationContext(), DownloadFileActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_contact) {
-            Intent intent=new Intent(getApplicationContext(),ContactUsActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ContactUsActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_logout) {
             getSharedPreferences("profile", Context.MODE_PRIVATE).edit().clear().apply();
-            Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
@@ -338,62 +342,45 @@ public class MainActivity extends AppCompatActivity
         pvHome.setVisibility(View.VISIBLE);
         tvLoading.setVisibility(View.VISIBLE);
         listView.setVisibility(View.GONE);
-        String[]keys=new String[]{"mode"};
-        String[]values=new String[]{"testgetAudiobook"};
-        String jsonRequest= Utils.createJsonRequest(keys,values);
+        String[] keys = new String[]{"mode"};
+        String[] values = new String[]{"testgetAudiobook"};
+        String jsonRequest = Utils.createJsonRequest(keys, values);
 
         String URL = Config.MAIN_URL;
         new WebserviceCall(MainActivity.this, URL, jsonRequest, "Getting BookList...!!", false, new AsyncResponse() {
             @Override
             public void onCallback(String response) {
-                Log.d("myapp",response);
-                model = new Gson().fromJson(response,BookListModel.class);
+                Log.d("myapp", response);
+                model = new Gson().fromJson(response, BookListModel.class);
 //                Toast.makeText(getApplicationContext(),"Refreshing" , Toast.LENGTH_SHORT).show();
-                if (model.getStatus().equalsIgnoreCase("1"))
-                {
+                if (model.getStatus().equalsIgnoreCase("1")) {
+                    if (audiobookList != null && audiobookList.size() > 0) {
+                        audiobookList.clear();
+                    }
                     pvHome.setVisibility(View.GONE);
                     tvLoading.setVisibility(View.GONE);
                     listView.setVisibility(View.VISIBLE);
-                    for (int i=0;i<model.getAudiobook().size();i++)
-                    {
+                    for (int i = 0; i < model.getAudiobook().size(); i++) {
                         audiobookList.add(model.getAudiobook().get(i));
                     }
                     booklistAdapter.notifyDataSetChanged();
-//                    BookListAdapter adapter=new BookListAdapter(MainActivity.this,R.layout.booklist_cus_layout,audiobookList,img);
-//                    listView.setAdapter(adapter);
-
                 }
-//                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                        String s=model.getAudiobook().get(i).getAudio_book_id();
-//                        String bkname=model.getAudiobook().get(i).getAudio_book_description().toString();
-//                        SharedPreferences preferences=getApplicationContext().getSharedPreferences("bookid", Context.MODE_PRIVATE);
-//                        SharedPreferences.Editor editor=preferences.edit();
-//                        editor.putString("id",s);
-//                        editor.commit();
-//                        Intent intent=new Intent(getApplicationContext(),ChapterListActivity.class);
-//                        intent.putExtra("bookname",bkname);
-//                        startActivity(intent);
-//
-//                    }
-//                });
             }
 
             @Override
             public void onFailure(String message) {
                 pvHome.setVisibility(View.GONE);
                 tvLoading.setVisibility(View.GONE);
-                Toast.makeText(MainActivity.this, ""+message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "" + message, Toast.LENGTH_SHORT).show();
             }
         }).execute();
 
 
-
     }
+
     private void requestPermission() {
 
-        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE,CALL_PHONE}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, CALL_PHONE}, PERMISSION_REQUEST_CODE);
     }
 
     private boolean checkPermission() {
@@ -402,6 +389,7 @@ public class MainActivity extends AppCompatActivity
 
         return result1 == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED;
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -410,8 +398,7 @@ public class MainActivity extends AppCompatActivity
 
                     boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
-                    if (locationAccepted)
-                    {
+                    if (locationAccepted) {
 
                     }
                     //Toast.makeText(this, "Permission Granted, Now you can access storage.", Toast.LENGTH_SHORT).show();
@@ -441,6 +428,7 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
     }
+
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(MainActivity.this)
                 .setMessage(message)
@@ -452,15 +440,76 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBookClick(int i) {
-        String s=model.getAudiobook().get(i).getAudio_book_id();
-        String bkname=model.getAudiobook().get(i).getAudio_book_description().toString();
-        SharedPreferences preferences=getApplicationContext().getSharedPreferences("bookid", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putString("id",s);
+        String s = model.getAudiobook().get(i).getAudio_book_id();
+        String bkname = model.getAudiobook().get(i).getAudio_book_description().toString();
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("bookid", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("id", s);
         editor.commit();
-        Intent intent=new Intent(getApplicationContext(),ChapterListActivity.class);
-        intent.putExtra("bookname",bkname);
+        Intent intent = new Intent(getApplicationContext(), ChapterListActivity.class);
+        intent.putExtra("bookname", bkname);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onDownloadBookClick(int i) {
+        String s = model.getAudiobook().get(i).getAudio_book_id();
+        bkname = model.getAudiobook().get(i).getAudio_book_description().toString();
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("bookid", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("id", s);
+        editor.commit();
+        getBookChapterforDownloadOnly();
+
+    }
+
+    private void getBookChapterforDownloadOnly() {
+        SharedPreferences preferences = getSharedPreferences("bookid", Context.MODE_PRIVATE);
+        s = preferences.getString("id", null);
+        String[] keys = new String[]{"mode", "audio_book_id", "file_recent"};
+        String[] values = new String[]{"getchapter", s, "r"};
+        String jsonRequest = Utils.createJsonRequest(keys, values);
+
+        String URL = Config.MAIN_URL;
+        new WebserviceCall(this, URL, jsonRequest, "Getting chapterList...!!", false, new AsyncResponse() {
+            @Override
+            public void onCallback(String response) {
+                Log.d("myapp", response);
+                chapterList = new ArrayList<ChapterListBean>();
+                final ChapterListModel model = new Gson().fromJson(response, ChapterListModel.class);
+//                Toast.makeText(getContext(),"Refreshing" , Toast.LENGTH_SHORT).show();
+                if (chapterList != null)
+                    chapterList.clear();
+                if (model.getStatus().equalsIgnoreCase("1")) {
+                    chapterList.addAll(model.getChapterList());
+
+                    if (chapterList != null) {
+                        for (int j = 0; j < chapterList.size(); j++) {
+                            downloadMp3Url = chapterList.get(j).getChapter_file();
+                            downloadMp3ChapterName = chapterList.get(j).getChapter_desc();
+//                //Toast.makeText(context, ""+downloadMp3Url, Toast.LENGTH_SHORT).show();
+
+                            ChapterListBeanEntityManager chapterListBeanEntityManager = new ChapterListBeanEntityManager();
+                            ChapterListBean chapterListBean = new ChapterListBean();
+                            chapterListBean.setChapter_id(chapterList.get(j).getChapter_id());
+                            chapterListBean.setChapter_desc(chapterList.get(j).getChapter_desc());
+                            chapterListBean.setChapter_file(chapterList.get(j).getChapter_file());
+                            chapterListBean.setDuration(chapterList.get(j).getDuration());
+                            chapterListBeanEntityManager.add(chapterListBean);
+
+                            new DownloadBookTask(MainActivity.this, chapterList,bkname);
+                        }
+                    }
+
+//                    Log.i("TAG", "onCallback: "+chapterList);
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(MainActivity.this, "" + message, Toast.LENGTH_SHORT).show();
+            }
+        }).execute();
     }
 }

@@ -23,18 +23,27 @@
         android:gravity="center_vertical"
         android:paddingLeft="05dp"
         android:text="Name"
-        android:layout_toLeftOf="@+id/right_arrow"
+        android:layout_toLeftOf="@+id/download_book_btn"
         android:layout_toRightOf="@+id/ivBookFolder"
         android:textColor="#ffffff"
         android:textSize="20dp" />
 
-    <ImageView
-        android:layout_centerVertical="true"
-        android:id="@+id/right_arrow"
-        android:layout_width="wrap_content"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_right_arrow"
-        android:layout_height="wrap_content" />
+    <!--<Button-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:id="@+id/right_arrow"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:src="@drawable/ic_file_download"-->
+        <!--android:contentDescription="download this book"-->
+        <!--android:layout_height="wrap_content" />-->
 
+    <Button
+        android:layout_centerVertical="true"
+        android:id="@+id/download_book_btn"
+        android:layout_width="45dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="40dp"
+        android:contentDescription="Download this book"
+        android:background="@drawable/ic_file_download"/>
 
 </RelativeLayout>

@@ -69,19 +69,13 @@ public class AllChapterListAdapter extends RecyclerView.Adapter<AllChapterListAd
             textView=(TextView)itemView.findViewById(R.id.chapter_name);
             download=(Button)itemView.findViewById(R.id.download_btn);
             rvBookRaw = (RelativeLayout) itemView.findViewById(R.id.book_Raw);
-//
-//        holder.textView.setText(chapterList.get(i).getChapter_desc().toString());
-//
 
-
-//            imageView=(ImageView)itemView.findViewById(R.id.right_arrow);
-//            textView=(TextView)itemView.findViewById(R.id.book_name);
-//            rvBookRaw = (RelativeLayout) itemView.findViewById(R.id.book_Raw);
             downloadedSong = new ArrayList<>();
             ChapterListBeanEntityManager chapterListBeanEntityManager = new ChapterListBeanEntityManager();
             if (chapterListBeanEntityManager.count() > 0){
                 downloadedSong = (ArrayList<ChapterListBean>) chapterListBeanEntityManager.select().asList();
             }
+
             rvBookRaw.setOnClickListener(this);
             download.setOnClickListener(this);
 
