@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "587063422618",
-    "firebase_url": "https://literaturesharingforvi-44036.firebaseio.com",
-    "project_id": "literaturesharingforvi-44036",
-    "storage_bucket": "literaturesharingforvi-44036.appspot.com"
+    "project_number": "1085612904428",
+    "firebase_url": "https://myliteraturesharingforvi.firebaseio.com",
+    "project_id": "myliteraturesharingforvi",
+    "storage_bucket": "myliteraturesharingforvi.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:587063422618:android:2a5df903191c155f",
+        "mobilesdk_app_id": "1:1085612904428:android:56489eb5fd856566",
         "android_client_info": {
-          "package_name": "com.lsfv.literaturesharing"
+          "package_name": "com.lsfv.myliteraturesharing"
         }
       },
       "oauth_client": [
         {
-          "client_id": "587063422618-36j11kk58smm67frs0438psc9ip4tjsv.apps.googleusercontent.com",
+          "client_id": "1085612904428-0qghu8on69uc9589e7p285som2ikb5nt.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.lsfv.literaturesharing",
+            "package_name": "com.lsfv.myliteraturesharing",
             "certificate_hash": "185a7a76bcc66049d86f5fb7bfd9daf8995e981b"
           }
         },
         {
-          "client_id": "587063422618-2hojd0epu8cv1ie2k9vt6qgssa5sn9ql.apps.googleusercontent.com",
+          "client_id": "1085612904428-l546j4528m57v76rimp1bmf20e1g4kle.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBqqX5P_0NMK0uo9IpcYzk-havHi9QdsgY"
+          "current_key": "AIzaSyBz5ctheRnQJOJuVKODmAkcN8kPu5QEr1A"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "587063422618-2hojd0epu8cv1ie2k9vt6qgssa5sn9ql.apps.googleusercontent.com",
+              "client_id": "1085612904428-l546j4528m57v76rimp1bmf20e1g4kle.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

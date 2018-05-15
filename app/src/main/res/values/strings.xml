@@ -23,6 +23,8 @@
     <string name="share_chooser_text">choose</string>
     <string name="share_email_native">native emial</string>
     <string name="share_mxplayer">mxplayer</string>
+    <string name="download_ticker">Downloading</string>
+    <string name="content_title">literature sharing</string>
 
     <string-array name="dd">
         <item>DD</item>
